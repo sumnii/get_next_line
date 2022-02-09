@@ -6,7 +6,7 @@
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:58:25 by sumsong           #+#    #+#             */
-/*   Updated: 2022/02/09 16:59:51 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/02/09 17:07:25 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,3 +14,5 @@
 # define GET_NEXT_LINE_H
 
 char	*get_next_line(int fd);
+
+#endif
