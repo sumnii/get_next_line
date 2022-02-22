@@ -11,5 +11,15 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdlib.h>
 
-char	*get_next_line(int fd);
+char	*get_next_line(int fd)
+{
+	int		read_size;
+	char	*buff;
+
+	buff = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	read_size = read(fd, buff, BUFFER_SIZE);
+	buff[BUFFER_SIZE] = '\0';
+	return (buff);
+}
