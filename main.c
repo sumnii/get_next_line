@@ -1,12 +1,13 @@
 #include "get_next_line.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-int main(void)
+int	main(void)
 {
 	int		fd;
 	char	*buf;
-	
+
 	fd = open("./text.txt", O_RDONLY);
 	if (fd == -1)
 		printf("file open error.\n");
