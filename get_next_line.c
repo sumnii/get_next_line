@@ -6,7 +6,7 @@
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:58:08 by sumsong           #+#    #+#             */
-/*   Updated: 2022/02/23 15:41:11 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/02/24 14:09:23 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,30 @@ char	*get_next_line(int fd)
 	static char	*strg;
 	char		*res;
 
-	// printf("start // strg : %s\n", strg);
-	if (strg != NULL && ft_strchr(strg, '\n'))
+	printf("\n    > [start]\n    > strg : %s\n\n", strg);
+	if (strg && ft_strchr_before(strg, '\n') && BUFFER_SIZE != 1)
 	{
 		res = ft_strdup(ft_strchr_before(strg, '\n'));
+		strg = ft_strdup(ft_strchr(strg, '\n'));
 		return (res);
 	}
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (buf == NULL)
 		return (NULL);
+	// buf[BUFFER_SIZE] = '\0';
 	while (1)
 	{
 		read_size = read(fd, buf, BUFFER_SIZE);
+		printf("    > [read_size] : %ld\n", read_size);
 		if (read_size <= 0)
 			return (NULL);
-		// printf("0 // buf : %s\n", buf);
-		if (ft_strchr(buf, '\n'))
+		printf("    > [buf] : %s\n", buf);
+		if (ft_strchr_before(buf, '\n'))
 		{
 			res = ft_strjoin(strg, ft_strchr_before(buf, '\n'));
-			// printf("1 // res : %s, strg : %s buf : %s\n", res, strg, buf);
+			// printf("1 // res : %s, strg : %s\n", res, strg);
 			strg = ft_strdup(ft_strchr(buf, '\n'));
-			// printf("2 // res : %s, strg : %s buf : %s\n", res, strg, buf);
+			// printf("2 // res : %s, strg : %s\n", res, strg);
 			free (buf);
 			return (res);
 		}

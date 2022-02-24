@@ -13,14 +13,16 @@ int	main(void)
 		printf("file open error.\n");
 	else
 	{
-		buf = get_next_line(fd);
-		printf("1 : \"%s\"\n", buf);
-		buf = get_next_line(fd);
-		printf("2 : \"%s\"\n", buf);
-		buf = get_next_line(fd);
-		printf("3 : \"%s\"\n", buf);
+		while (1)
+		{
+			buf = get_next_line(fd);
+			if (!buf)
+			{
+				free(buf);
+				close(fd);
+				return (0);
+			}
+			printf("=> %s", buf);
+		}
 	}
-	free(buf);
-	close(fd);
-	return (0);
 }
