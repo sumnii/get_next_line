@@ -20,6 +20,7 @@ int	main(void)
 			{
 				free(buf);
 				close(fd);
+				system("leaks a.out");
 				return (0);
 			}
 			printf("=> %s", buf);

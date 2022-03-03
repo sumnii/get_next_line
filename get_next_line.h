@@ -6,7 +6,7 @@
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:58:25 by sumsong           #+#    #+#             */
-/*   Updated: 2022/02/23 15:41:23 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/03/03 19:04:59 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,9 @@ char	*ft_strchr(const char *str, int chr);
 char	*ft_strchr_before(const char *str, int chr);
 char	*ft_strjoin(char const *s1, char const *s2);
 
+typedef struct s_strg {
+	char	*piece;
+	ssize_t	saved_size;
+}				t_strg;
 
 #endif
