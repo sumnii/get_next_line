@@ -6,19 +6,17 @@
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:58:08 by sumsong           #+#    #+#             */
-/*   Updated: 2022/03/03 19:04:56 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/03/03 21:14:42 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
 
 char	*get_next_line(int fd)
 {
-	char			*buf;
 	static t_strg	strg;
+	char			*buf;
 	char			*res;
 
 	if (strg.piece && ft_strchr_before(strg.piece, '\n') && BUFFER_SIZE != 1)

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_copy.h                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:58:25 by sumsong           #+#    #+#             */
-/*   Updated: 2022/03/03 20:57:56 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/03/05 14:27:47 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_COPY_H
+# define GET_NEXT_LINE_COPY_H
 
 # include <fcntl.h>
 # include <stdlib.h>
@@ -20,9 +20,9 @@
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s1);
-char	*ft_strchr(const char *str, int chr);
 char	*ft_strchr_before(const char *str, int chr);
-char	*ft_strjoin(char *s1, char *s2);
+size_t	ft_strchr_idx(const char *str, int chr);
+char	*ft_strjoin(char *s1, char *s2, size_t s2_idx);
 
 typedef struct s_strg {
 	char	*piece;

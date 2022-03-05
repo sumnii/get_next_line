@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_copy.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:59:53 by sumsong           #+#    #+#             */
-/*   Updated: 2022/03/03 21:04:16 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/03/05 14:25:04 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_copy.h"
 
 size_t	ft_strlen(const char *s)
 {
@@ -44,20 +44,6 @@ char	*ft_strdup(const char *s1)
 	return (dest);
 }
 
-char	*ft_strchr(const char *str, int chr)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == (char)chr && str[i + 1])
-			return ((char *)&str[i + 1]);
-		++i;
-	}
-	return (NULL);
-}
-
 char	*ft_strchr_before(const char *str, int chr)
 {
 	int		i;
@@ -86,22 +72,38 @@ char	*ft_strchr_before(const char *str, int chr)
 	return (NULL);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+size_t	ft_strchr_idx(const char *str, int chr)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == (char)chr)
+			return (i);
+		++i;
+	}
+	return (0);
+}
+
+char	*ft_strjoin(char *s1, char *s2, size_t s2_idx)
 {
 	char	*str;
 	int		len;
-	int		i;
+	size_t	i;
+	size_t	j;
 
-	i = 0;
 	len = ft_strlen(s1);
-	len += ft_strlen(s2);
+	len += s2_idx + 1;
 	str = (char *)malloc(sizeof(char) * len + 1);
 	if (str == NULL)
 		return (NULL);
+	i = 0;
 	while (s1 && *s1)
 		str[i++] = *s1++;
-	while (*s2)
-		str[i++] = *s2++;
+	j = 0;
+	while (j <= s2_idx)
+		str[i++] = s2[j++];
 	str[i] = '\0';
 	return (str);
 }
