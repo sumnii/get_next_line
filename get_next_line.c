@@ -6,96 +6,105 @@
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:58:08 by sumsong           #+#    #+#             */
-/*   Updated: 2022/04/21 22:47:38 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/05/10 17:28:56 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_cut_str(char *str, t_list *save, int sign);
-void	ft_move_storage(char **move_from, char **move_to);
-char	*ft_save_buf(char *str1, char *str2, char **free_target);
-char	*ft_free_storage(t_list *save);
-
 char	*get_next_line(int fd)
 {
-	static t_list	save;
-	char			buf[BUFFER_SIZE + 1];
-	char			*line;
-
-	while (1)
-	{
-		if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0)
-			return (NULL);
-		if (ft_lf_idx(save.str, '\n') != -1)
-			return (ft_cut_str(save.str, &save, 1));
-		if (save.str && save.size < BUFFER_SIZE)
-		{
-			line = ft_strdup(save.str);
-			ft_free_storage(&save);
-			return (line);
-		}
-		save.size = read(fd, buf, BUFFER_SIZE);
-		if (!save.str && save.size <= 0)
-			return (ft_free_storage(&save));
-		buf[save.size] = '\0';
-		if (ft_lf_idx(buf, '\n') != -1)
-			return (ft_cut_str(buf, &save, 2));
-		save.str = ft_save_buf(save.str, buf, &(save.str));
-	}
+	static char	*save;
+	char		*line;
+	
+	if (save에 개행이 있다)
+		return (save를 쪼개는 함수(&save));
+	line = 버퍼 읽는 함수(fd);
+	// 리턴 : 버퍼 한 줄
+	// 리턴 NULL -> 종료
+	if (!line) // read 오류, malloc 오류
+		return (종료 함수);
+	return (line 쪼개는 함수(&line, &save));
+	// 리턴 NULL -> malloc 오류 -> 종료(쪼개는 함수 내부에서)
+	// 리턴 한줄 -> 개행 뒤 저장하고 개행 앞 잘 저장
 }
 
-char	*ft_cut_str(char *str, t_list *save, int sign)
+char	*버퍼 읽는 함수(int fd)
 {
-	size_t	i;
-	char	*before_lf;
 	char	*line;
+	int		read_size;
+	char	*buf;
 
-	i = ft_lf_idx(str, '\n');
-	before_lf = ft_stridup(str, 0, i);
-	save->after_lf = ft_stridup(str, i + 1, ft_strlen(str) - 1);
-	if (sign == 1)
+	// line = NULL; 있고 없고 strjoin 안에서의 차이?
+	while (line에 개행이 없다)
 	{
-		ft_move_storage(&save->after_lf, &save->str);
-		return (before_lf);
+		buf = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
+		read_size = read(fd, buf, BUFFER_SIZE);
+		if (read_size < 0)
+			return (NULL);
+		buf[read_size] = '\0';
+		line = ft_strjoin(&line, &buf);
+		if (!line)
+			return (NULL);
 	}
-	else
-	{
-		line = ft_strjoin(save->str, before_lf);
-		free(before_lf);
-		ft_move_storage(&save->after_lf, &save->str);
-		return (line);
-	}
+	return (line);
 }
 
-void	ft_move_storage(char **move_from, char **move_to)
+char	*ft_strjoin(char **line, char **buf)
 {
-	free(*move_to);
-	*move_to = *move_from;
-	*move_from = NULL;
+	char	*merged;
+	size_t	i;
+	size_t	j;
+
+	if (!(*buf))
+		return (NULL);
+	line은 비어있을 수 있음
+	합치기
+	if (merged malloc 오류)
+		return (NULL);
+	if (*line)
+		free (*line);
+	if (*buf)
+		free (*buf);
+	return (merged);
 }
 
-char	*ft_save_buf(char *save, char *buf, char **free_target)
+char	*line 쪼개는 함수(char **line, char **save)
 {
-	char	*merge;
+	char	*return_line;
 
-	merge = ft_strjoin(save, buf);
-	if (*free_target)
+	개행 기준 앞 뒤 복사
+	if (malloc 오류)
+		return (종료 함수(line, save));
+	return_line = line의 개행 앞;
+	*save = ft_strjoin(save, line의 개행 뒤);
+	free(*line);
+	return (return_line);
+}
+
+char	*save 쪼개는 함수(char **save)
+{
+	char	*return_line;
+
+	개행 기준 앞 뒤 복사
+	if (malloc 오류)
+		return (종료 함수(개행 앞이나 뒤 만들던 것, save));
+	return_line = save의 개행 앞;
+	*save = ft_strjoin(save, save의 개행 뒤);
+	return (return_line)
+}
+
+void	*종료 함수(char **line, char **save)
+{
+	if (*line)
 	{
-		free (*free_target);
-		*free_target = NULL;
+		free(*line);
+		*line = NULL;
 	}
-	return (merge);
-}
-
-char	*ft_free_storage(t_list *save)
-{
-	if (save->str)
-		free(save->str);
-	save->str = NULL;
-	if (save->after_lf)
-		free(save->after_lf);
-	save->after_lf = NULL;
-	save->size = 0;
+	if (*save)
+	{
+		free(*save);
+		*save = NULL;
+	}
 	return (NULL);
 }
