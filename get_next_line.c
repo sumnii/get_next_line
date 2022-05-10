@@ -6,7 +6,7 @@
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:58:08 by sumsong           #+#    #+#             */
-/*   Updated: 2022/05/10 17:28:56 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/05/10 22:19:20 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,35 +17,41 @@ char	*get_next_line(int fd)
 	static char	*save;
 	char		*line;
 	
-	if (save에 개행이 있다)
-		return (save를 쪼개는 함수(&save));
-	line = 버퍼 읽는 함수(fd);
+	if (BUFFER_SIZE <= 0 || fd < 0)
+		return (NULL);
+	if (ft_find_lf(save))
+		return (ft_cut_save(&save));
+	line = ft_read_buf(fd);
 	// 리턴 : 버퍼 한 줄
 	// 리턴 NULL -> 종료
 	if (!line) // read 오류, malloc 오류
-		return (종료 함수);
-	return (line 쪼개는 함수(&line, &save));
+		return (ft_close(&line, &save));
+	return (ft_cut_line(&line, &save));
 	// 리턴 NULL -> malloc 오류 -> 종료(쪼개는 함수 내부에서)
 	// 리턴 한줄 -> 개행 뒤 저장하고 개행 앞 잘 저장
 }
 
-char	*버퍼 읽는 함수(int fd)
+char	*ft_read_buf(int fd)
 {
 	char	*line;
 	int		read_size;
 	char	*buf;
 
-	// line = NULL; 있고 없고 strjoin 안에서의 차이?
-	while (line에 개행이 없다)
+	line = NULL;
+	while (!ft_find_lf(line))
 	{
-		buf = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
-		read_size = read(fd, buf, BUFFER_SIZE);
-		if (read_size < 0)
+		buf = (char *)ft_calloc(sizeof(char), BUFFER_SIZE + 1);
+		if (!buf)
 			return (NULL);
-		buf[read_size] = '\0';
+		read_size = read(fd, buf, BUFFER_SIZE);
+		if (read_size <= 0)
+			return (NULL);
+		// buf[read_size] = '\0';
 		line = ft_strjoin(&line, &buf);
 		if (!line)
 			return (NULL);
+		if (read_size < BUFFER_SIZE) // eof 도달
+			return (line);
 	}
 	return (line);
 }
@@ -55,13 +61,24 @@ char	*ft_strjoin(char **line, char **buf)
 	char	*merged;
 	size_t	i;
 	size_t	j;
+	size_t	len;
 
 	if (!(*buf))
 		return (NULL);
-	line은 비어있을 수 있음
-	합치기
-	if (merged malloc 오류)
+	len = ft_strlen(*line); // NULL이 들어왔을 때 0이 반환되도록
+	len += ft_strlen(*buf);
+	merged = (char *)ft_calloc(sizeof(char), len + 1);
+	if (!merged)
 		return (NULL);
+	i = 0;
+	while (*line && (*line)[i])
+	{
+		merged[i] = (*line)[i];
+		++i;
+	}
+	j = 0;
+	while (*buf && (*buf)[j])
+		merged[i++] = (*buf)[j++];
 	if (*line)
 		free (*line);
 	if (*buf)
@@ -69,32 +86,60 @@ char	*ft_strjoin(char **line, char **buf)
 	return (merged);
 }
 
-char	*line 쪼개는 함수(char **line, char **save)
+char	*ft_cut_line(char **line, char **save)
 {
 	char	*return_line;
+	char	*before_lf;
+	int		lf_i;
 
-	개행 기준 앞 뒤 복사
-	if (malloc 오류)
-		return (종료 함수(line, save));
-	return_line = line의 개행 앞;
-	*save = ft_strjoin(save, line의 개행 뒤);
+	lf_i = ft_find_lf(*line);
+	if (lf_i == -1) // eof 도달 + 개행 없음
+		return (*line);
+	before_lf = ft_idx_dup(*line, 0, lf_i);
+	if (!before_lf)
+		return (ft_close(line, save));
+	return_line = ft_strjoin(save, &before_lf);
+	*save = ft_idx_dup(*line, lf_i + 1, ft_strlen(*line) - 1);
 	free(*line);
 	return (return_line);
 }
 
-char	*save 쪼개는 함수(char **save)
+char	*ft_idx_dup(char *str, size_t i, size_t j)
 {
-	char	*return_line;
-
-	개행 기준 앞 뒤 복사
-	if (malloc 오류)
-		return (종료 함수(개행 앞이나 뒤 만들던 것, save));
-	return_line = save의 개행 앞;
-	*save = ft_strjoin(save, save의 개행 뒤);
-	return (return_line)
+	size_t	len;
+	char	*dup;
+	
+	len = j - i + 1;
+	if (len == 0)
+		return (NULL);
+	dup = (char *)ft_calloc(sizeof(char), len + 1);
+	if (!dup)
+		return (NULL);
+	while (i <= j)
+	{
+		dup[i] = str[i];
+		++i;
+	}
+	return (dup);
 }
 
-void	*종료 함수(char **line, char **save)
+char	*ft_cut_save(char **save)
+{
+	char	*return_line;
+	char	*after_lf;
+	int		lf_i;
+
+	lf_i = ft_find_lf(*save);
+	return_line = ft_idx_dup(*save, 0, lf_i);
+	if (!return_line)
+		return (ft_close(NULL, save));
+	after_lf = ft_idx_dup(*save, lf_i + 1, ft_strlen(*save) - 1);
+	free(*save);
+	*save = after_lf;
+	return (return_line);
+}
+
+void	*ft_close(char **line, char **save)
 {
 	if (*line)
 	{
@@ -107,4 +152,47 @@ void	*종료 함수(char **line, char **save)
 		*save = NULL;
 	}
 	return (NULL);
+}
+
+void	*ft_calloc(size_t size, size_t count)
+{
+	void			*ary;
+	unsigned char	*ptr;
+	size_t			n;
+
+	n = size * count;
+	ary = malloc(n);
+	if (!ary)
+		return (NULL);
+	ptr = ary;
+	while (n > 0)
+	{
+		*ptr++ = 0;
+		--n;
+	}
+	return (ptr);
+}
+
+size_t	ft_strlen(char *str)
+{
+	size_t	len;
+
+	len = 0;
+	while (str[len])
+		++len;
+	return (len);
+}
+
+int	ft_find_lf(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			return (i);
+		++i;
+	}
+	return (-1);
 }
