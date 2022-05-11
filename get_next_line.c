@@ -19,7 +19,7 @@ char	*get_next_line(int fd)
 	
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (NULL);
-	if (ft_find_lf(save))
+	if (ft_find_lf(save) != -1)
 		return (ft_cut_save(&save));
 	line = ft_read_buf(fd);
 	// 리턴 : 버퍼 한 줄
@@ -38,16 +38,16 @@ char	*ft_read_buf(int fd)
 	char	*buf;
 
 	line = NULL;
-	while (!ft_find_lf(line))
+	while (ft_find_lf(line) == -1)
 	{
 		buf = (char *)ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 		if (!buf)
 			return (NULL);
-		read_size = read(fd, buf, BUFFER_SIZE);
-		if (read_size <= 0)
+        read_size = read(fd, buf, BUFFER_SIZE);
+		if (read_size <= 0 && !line)
 			return (NULL);
 		// buf[read_size] = '\0';
-		line = ft_strjoin(&line, &buf);
+		line = ft_strjoin(line, buf);
 		if (!line)
 			return (NULL);
 		if (read_size < BUFFER_SIZE) // eof 도달
@@ -56,33 +56,33 @@ char	*ft_read_buf(int fd)
 	return (line);
 }
 
-char	*ft_strjoin(char **line, char **buf)
+char	*ft_strjoin(char *line, char *buf)
 {
 	char	*merged;
 	size_t	i;
 	size_t	j;
 	size_t	len;
 
-	if (!(*buf))
+	if (!buf)
 		return (NULL);
-	len = ft_strlen(*line); // NULL이 들어왔을 때 0이 반환되도록
-	len += ft_strlen(*buf);
+	len = ft_strlen(line); // NULL이 들어왔을 때 0이 반환되도록
+	len += ft_strlen(buf);
 	merged = (char *)ft_calloc(sizeof(char), len + 1);
 	if (!merged)
 		return (NULL);
 	i = 0;
-	while (*line && (*line)[i])
+	while (line && line[i])
 	{
-		merged[i] = (*line)[i];
+		merged[i] = line[i];
 		++i;
 	}
 	j = 0;
-	while (*buf && (*buf)[j])
-		merged[i++] = (*buf)[j++];
-	if (*line)
-		free (*line);
-	if (*buf)
-		free (*buf);
+	while (buf && buf[j])
+		merged[i++] = buf[j++];
+	if (line)
+		free (line);
+	if (buf)
+		free (buf);
 	return (merged);
 }
 
@@ -94,11 +94,14 @@ char	*ft_cut_line(char **line, char **save)
 
 	lf_i = ft_find_lf(*line);
 	if (lf_i == -1) // eof 도달 + 개행 없음
-		return (*line);
+    {
+        free(*save);
+        return (*line);
+    }
 	before_lf = ft_idx_dup(*line, 0, lf_i);
 	if (!before_lf)
 		return (ft_close(line, save));
-	return_line = ft_strjoin(save, &before_lf);
+	return_line = ft_strjoin(*save, before_lf);
 	*save = ft_idx_dup(*line, lf_i + 1, ft_strlen(*line) - 1);
 	free(*line);
 	return (return_line);
@@ -141,12 +144,12 @@ char	*ft_cut_save(char **save)
 
 void	*ft_close(char **line, char **save)
 {
-	if (*line)
+	if (line && *line)
 	{
 		free(*line);
 		*line = NULL;
 	}
-	if (*save)
+	if (save && *save)
 	{
 		free(*save);
 		*save = NULL;
@@ -167,10 +170,11 @@ void	*ft_calloc(size_t size, size_t count)
 	ptr = ary;
 	while (n > 0)
 	{
-		*ptr++ = 0;
+		*ptr = 0;
+        ptr++;
 		--n;
 	}
-	return (ptr);
+	return (ary);
 }
 
 size_t	ft_strlen(char *str)
@@ -178,7 +182,7 @@ size_t	ft_strlen(char *str)
 	size_t	len;
 
 	len = 0;
-	while (str[len])
+	while (str && str[len])
 		++len;
 	return (len);
 }
@@ -188,7 +192,7 @@ int	ft_find_lf(char *str)
 	size_t	i;
 
 	i = 0;
-	while (str[i])
+	while (str && str[i])
 	{
 		if (str[i] == '\n')
 			return (i);

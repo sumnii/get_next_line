@@ -6,7 +6,7 @@ int	main(void)
 	int		fd;
 	char	*buf;
 
-	fd = open("./test", O_RDONLY);
+	fd = open("../test", O_RDONLY);
 	if (fd == -1)
 		printf("file open error.\n");
 	else
