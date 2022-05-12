@@ -6,7 +6,7 @@
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:58:08 by sumsong           #+#    #+#             */
-/*   Updated: 2022/05/10 22:19:20 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/05/12 14:35:35 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,7 @@ char	*ft_read_buf(int fd, char **save)
 			return (NULL);
         read_size = read(fd, buf, BUFFER_SIZE);
 		if (read_size <= 0 && !line && !(*save))
-		{
-			free(buf);
-			return (NULL);
-		}
-		// buf[read_size] = '\0';
+			return (ft_close(NULL, &buf));
 		line = ft_strjoin(&line, &buf);
 		if (!line)
 			return (NULL);
@@ -108,6 +104,7 @@ char	*ft_cut_line(char **line, char **save)
 	if (lf_i == -1) // eof 도달 + 개행 없음
     {
         free(*save);
+		*save = NULL;
         return (*line);
     }
 	before_lf = ft_idx_dup(*line, 0, lf_i);
