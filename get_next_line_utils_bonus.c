@@ -6,97 +6,97 @@
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:59:53 by sumsong           #+#    #+#             */
-/*   Updated: 2022/04/21 22:30:51 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/05/12 14:54:42 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen(char *str)
 {
 	size_t	len;
 
-	if (s == NULL)
-		return (0);
 	len = 0;
-	while (s[len])
+	while (str && str[len])
 		++len;
 	return (len);
 }
 
-int	ft_lf_idx(const char *str, int chr)
+void	*ft_calloc(size_t size, size_t count)
 {
-	int	i;
+	void			*ary;
+	unsigned char	*ptr;
+	size_t			n;
+
+	n = size * count;
+	ary = malloc(n);
+	if (!ary)
+		return (NULL);
+	ptr = ary;
+	while (n > 0)
+	{
+		*ptr = 0;
+		ptr++;
+		--n;
+	}
+	return (ary);
+}
+
+int	ft_find_lf(char *str)
+{
+	size_t	i;
 
 	i = 0;
-	if (!str)
-		return (-1);
-	while (str[i])
+	while (str && str[i])
 	{
-		if (str[i] == (char)chr)
+		if (str[i] == '\n')
 			return (i);
 		++i;
 	}
 	return (-1);
 }
 
-char	*ft_stridup(const char *s1, int start_i, int end_i)
+char	*ft_strjoin(char **line, char **buf)
 {
-	size_t	len;
-	char	*dest;
-	size_t	i;
-
-	len = end_i - start_i + 1;
-	if (len == 0)
-		return (NULL);
-	i = 0;
-	dest = (char *)malloc(sizeof(char) * (len + 1));
-	if (!dest)
-		return (NULL);
-	while (start_i <= end_i)
-		dest[i++] = s1[start_i++];
-	dest[i] = '\0';
-	return (dest);
-}
-
-char	*ft_strjoin(char *s1, char *s2)
-{
-	char	*str;
-	int		len;
+	char	*merged;
 	size_t	i;
 	size_t	j;
+	size_t	len;
 
-	len = ft_strlen(s1);
-	len += ft_strlen(s2);
-	str = (char *)malloc(sizeof(char) * len + 1);
-	if (str == NULL)
+	if (!(*buf))
+		return (NULL);
+	len = ft_strlen(*line);
+	len += ft_strlen(*buf);
+	merged = (char *)ft_calloc(sizeof(char), len + 1);
+	if (!merged)
 		return (NULL);
 	i = 0;
-	while (s1 && *s1)
-		str[i++] = *s1++;
-	j = 0;
-	while (s2 && s2[j])
-		str[i++] = s2[j++];
-	str[i] = '\0';
-	return (str);
-}
-
-char	*ft_strdup(const char *s1)
-{
-	size_t	len;
-	char	*dest;
-	size_t	i;
-
-	len = ft_strlen(s1);
-	i = 0;
-	dest = (char *)malloc(sizeof(char) * (len + 1));
-	if (dest == 0)
-		return (0);
-	while (i < len)
+	while (*line && (*line)[i])
 	{
-		dest[i] = s1[i];
+		merged[i] = (*line)[i];
 		++i;
 	}
-	dest[i] = 0;
-	return (dest);
+	j = 0;
+	while (*buf && (*buf)[j])
+		merged[i++] = (*buf)[j++];
+	ft_close(line, buf);
+	return (merged);
+}
+
+char	*ft_idx_dup(char *str, size_t i, size_t j)
+{
+	size_t	len;
+	char	*dup;
+	size_t	idx;
+
+	len = j - i + 1;
+	if (len == 0)
+		return (NULL);
+	dup = (char *)ft_calloc(sizeof(char), len + 1);
+	if (!dup)
+		return (NULL);
+	idx = 0;
+	while (i <= j)
+		dup[idx++] = str[i++];
+	return (dup);
 }
