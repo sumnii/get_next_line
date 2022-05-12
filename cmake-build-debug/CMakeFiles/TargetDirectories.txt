@@ -1,0 +1,3 @@
+/Users/sumsong/Documents/get_next_line/cmake-build-debug/CMakeFiles/get_next_line.dir
+/Users/sumsong/Documents/get_next_line/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/sumsong/Documents/get_next_line/cmake-build-debug/CMakeFiles/rebuild_cache.dir
