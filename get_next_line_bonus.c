@@ -6,7 +6,7 @@
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:58:08 by sumsong           #+#    #+#             */
-/*   Updated: 2022/05/12 16:36:59 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/05/12 16:38:38 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 char	*get_next_line(int fd)
 {
-	static char	*save;
+	static char	*save[FD_MAX];
 	char		*line;
 
 	if (BUFFER_SIZE <= 0 || fd < 0 || fd > FD_MAX)
 		return (NULL);
-	if (ft_find_lf(save) != -1)
-		return (ft_cut_save(&save));
-	line = ft_read_buf(fd, &save);
+	if (ft_find_lf(save[fd]) != -1)
+		return (ft_cut_save(&(save[fd])));
+	line = ft_read_buf(fd, &(save[fd]));
 	if (!line)
-		return (ft_close(&line, &save));
-	return (ft_cut_line(&line, &save));
+		return (ft_close(&line, &(save[fd])));
+	return (ft_cut_line(&line, &(save[fd])));
 }
 
 char	*ft_read_buf(int fd, char **save)
