@@ -6,7 +6,7 @@
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:58:25 by sumsong           #+#    #+#             */
-/*   Updated: 2022/05/12 14:55:12 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/05/12 16:36:41 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
+
+# define FD_MAX 10240
 
 char	*get_next_line(int fd);
 char	*ft_read_buf(int fd, char **save);
