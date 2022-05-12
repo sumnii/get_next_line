@@ -45,13 +45,19 @@ char	*ft_read_buf(int fd, char **save)
 			return (NULL);
         read_size = read(fd, buf, BUFFER_SIZE);
 		if (read_size <= 0 && !line && !(*save))
+		{
+			free(buf);
 			return (NULL);
+		}
 		// buf[read_size] = '\0';
 		line = ft_strjoin(&line, &buf);
 		if (!line)
 			return (NULL);
-		if (read_size < BUFFER_SIZE) // eof 도달
+		if (read_size < BUFFER_SIZE) // eof
+		{
+			free(buf);
 			return (ft_strjoin(save, &line));
+		}
 	}
 	return (line);
 }
