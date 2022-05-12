@@ -51,14 +51,14 @@ build cmake_object_order_depends_target_get_next_line: phony || CMakeFiles/get_n
 
 build CMakeFiles/get_next_line.dir/get_next_line.c.o: C_COMPILER__get_next_line_Debug /Users/sumsong/Documents/get_next_line/get_next_line.c || cmake_object_order_depends_target_get_next_line
   DEP_FILE = CMakeFiles/get_next_line.dir/get_next_line.c.o.d
-  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu11
+  FLAGS = -fsanitize=address -g -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu11
   INCLUDES = -I/Users/sumsong/Documents/get_next_line/.
   OBJECT_DIR = CMakeFiles/get_next_line.dir
   OBJECT_FILE_DIR = CMakeFiles/get_next_line.dir
 
 build CMakeFiles/get_next_line.dir/main.c.o: C_COMPILER__get_next_line_Debug /Users/sumsong/Documents/get_next_line/main.c || cmake_object_order_depends_target_get_next_line
   DEP_FILE = CMakeFiles/get_next_line.dir/main.c.o.d
-  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu11
+  FLAGS = -fsanitize=address -g -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu11
   INCLUDES = -I/Users/sumsong/Documents/get_next_line/.
   OBJECT_DIR = CMakeFiles/get_next_line.dir
   OBJECT_FILE_DIR = CMakeFiles/get_next_line.dir
@@ -72,7 +72,7 @@ build CMakeFiles/get_next_line.dir/main.c.o: C_COMPILER__get_next_line_Debug /Us
 # Link the executable get_next_line
 
 build get_next_line: C_EXECUTABLE_LINKER__get_next_line_Debug CMakeFiles/get_next_line.dir/get_next_line.c.o CMakeFiles/get_next_line.dir/main.c.o
-  FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  FLAGS = -fsanitize=address -g -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
   OBJECT_DIR = CMakeFiles/get_next_line.dir
   POST_BUILD = :
   PRE_LINK = :

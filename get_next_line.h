@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 42
 #endif
 
 # include <fcntl.h>
@@ -22,8 +22,8 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
-char	*ft_read_buf(int fd);
-char	*ft_strjoin(char *line, char *buf);
+char	*ft_read_buf(int fd, char **save);
+char	*ft_strjoin(char **line, char **buf);
 char	*ft_cut_line(char **line, char **save);
 char	*ft_idx_dup(char *str, size_t i, size_t j);
 char	*ft_cut_save(char **save);

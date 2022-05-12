@@ -25,7 +25,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 8,
+				"line" : 10,
 				"parent" : 0
 			},
 			{
@@ -42,7 +42,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk"
+					"fragment" : " -fsanitize=address -g -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk"
 				},
 				{
 					"fragment" : "-std=gnu11"
@@ -77,7 +77,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g",
+				"fragment" : "-fsanitize=address -g -g",
 				"role" : "flags"
 			},
 			{
