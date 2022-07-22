@@ -6,13 +6,13 @@
 /*   By: sumsong <sumsong@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 16:59:53 by sumsong           #+#    #+#             */
-/*   Updated: 2022/05/12 14:54:42 by sumsong          ###   ########.fr       */
+/*   Updated: 2022/07/22 16:55:40 by sumsong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-size_t	ft_strlen(char *str)
+size_t	gnl_strlen(char *str)
 {
 	size_t	len;
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(char *str)
 	return (len);
 }
 
-void	*ft_calloc(size_t size, size_t count)
+void	*gnl_calloc(size_t size, size_t count)
 {
 	void			*ary;
 	unsigned char	*ptr;
@@ -42,7 +42,7 @@ void	*ft_calloc(size_t size, size_t count)
 	return (ary);
 }
 
-int	ft_find_lf(char *str)
+int	gnl_find_lf(char *str)
 {
 	size_t	i;
 
@@ -56,7 +56,7 @@ int	ft_find_lf(char *str)
 	return (-1);
 }
 
-char	*ft_strjoin(char **line, char **buf)
+char	*gnl_strjoin(char **line, char **buf)
 {
 	char	*merged;
 	size_t	i;
@@ -65,9 +65,9 @@ char	*ft_strjoin(char **line, char **buf)
 
 	if (!(*buf))
 		return (NULL);
-	len = ft_strlen(*line);
-	len += ft_strlen(*buf);
-	merged = (char *)ft_calloc(sizeof(char), len + 1);
+	len = gnl_strlen(*line);
+	len += gnl_strlen(*buf);
+	merged = (char *)gnl_calloc(sizeof(char), len + 1);
 	if (!merged)
 		return (NULL);
 	i = 0;
@@ -79,11 +79,11 @@ char	*ft_strjoin(char **line, char **buf)
 	j = 0;
 	while (*buf && (*buf)[j])
 		merged[i++] = (*buf)[j++];
-	ft_close(line, buf);
+	gnl_close(line, buf);
 	return (merged);
 }
 
-char	*ft_idx_dup(char *str, size_t i, size_t j)
+char	*gnl_idx_dup(char *str, size_t i, size_t j)
 {
 	size_t	len;
 	char	*dup;
@@ -92,7 +92,7 @@ char	*ft_idx_dup(char *str, size_t i, size_t j)
 	len = j - i + 1;
 	if (len == 0)
 		return (NULL);
-	dup = (char *)ft_calloc(sizeof(char), len + 1);
+	dup = (char *)gnl_calloc(sizeof(char), len + 1);
 	if (!dup)
 		return (NULL);
 	idx = 0;
